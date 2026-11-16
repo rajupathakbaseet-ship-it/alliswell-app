@@ -1,7 +1,7 @@
 {
- "versionCode": 7,
- "version": "1.0.6",
- "notes": "नया: व्रत-त्योहार पेज (पूरी जानकारी और पूजा विधि), बड़ी दुकान (सभी रत्न, उपरत्न, 1-14 मुखी रुद्राक्ष, 16 मालाएँ, यंत्र), स्वागत पेज और मोबाइल नंबर से लॉगिन।",
+ "versionCode": 8,
+ "version": "1.0.7",
+ "notes": "दुकान में नवरत्नों के नए सुंदर चित्र, हिंदी और इंग्लिश दोनों नाम के साथ।",
  "force": false,
- "apk": "https://github.com/rajupathakbaseet-ship-it/alliswell-app/releases/download/v1.0.6/AllIsWellRashifal.apk"
+ "apk": "https://github.com/rajupathakbaseet-ship-it/alliswell-app/releases/download/v1.0.7/AllIsWellRashifal.apk"
 }
