@@ -67,6 +67,7 @@ def shell(title, desc, canon, body, ld):
 <html lang="hi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>{esc(title)}</title><meta name="description" content="{esc(desc)}">
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-20R9EGZKVE"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){{dataLayer.push(arguments)}}gtag("js",new Date());gtag("config","G-20R9EGZKVE");</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5358706010218532" crossorigin="anonymous"></script>
 <link rel="canonical" href="{canon}"><link rel="icon" href="../favicon.png">
 <meta property="og:title" content="{esc(title)}"><meta property="og:description" content="{esc(desc)}"><meta property="og:image" content="{SITE}/og.jpg"><meta property="og:url" content="{canon}">
 <link href="https://fonts.googleapis.com/css2?family=Mukta:wght@400;700;800&display=swap" rel="stylesheet">
