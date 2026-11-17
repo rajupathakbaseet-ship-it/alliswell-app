@@ -146,6 +146,7 @@ def main():
 
     urls = [("", "daily"), ("rashifal/", "daily")] + [(f"rashifal/{s}.html", "daily") for _, s, *_ in RASHIS] + \
            [("lekh/", "weekly")] + [("lekh/" + f, "monthly") for f in sorted(os.listdir(os.path.join(ROOT, "docs", "lekh"))) if f.endswith(".html") and f != "index.html"] * os.path.isdir(os.path.join(ROOT, "docs", "lekh")) + \
+           [(d + "/" + (f if f != "index.html" else ""), "weekly" if f == "index.html" else "monthly") for d in ("en/lekh", "web-stories") if os.path.isdir(os.path.join(ROOT, "docs", d)) for f in sorted(os.listdir(os.path.join(ROOT, "docs", d))) if f.endswith(".html")] + \
            [(u, "monthly") for u in ("about.html", "contact.html", "privacy.html", "disclaimer.html", "terms.html")]
     sm = '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' + "".join(
         f"  <url><loc>{SITE}/{u}</loc><lastmod>{iso}</lastmod><changefreq>{c}</changefreq></url>\n" for u, c in urls) + "</urlset>\n"
