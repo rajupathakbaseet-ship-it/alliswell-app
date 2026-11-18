@@ -92,14 +92,18 @@ SVC = {"hi": [("📜", "जन्म कुंडली रिपोर्ट", 
               ("🪐", "Shani Sade Sati", "Remedies", "Namaste Pandit ji, I want to ask about Sade Sati."),
               ("🐍", "Rahu-Ketu Dosha", "Remedies", "Namaste Pandit ji, I want to ask about Rahu-Ketu dosha.")]}
 TXT = {"hi": dict(nav=[("/", "होम"), ("/rashifal/", "आज का राशिफल"), ("/rashifal/saptahik.html", "साप्ताहिक राशिफल"), ("/rashifal/masik.html", "मासिक राशिफल"),
-                       ("/#prem", "लव राशिफल"), ("/lekh/", "राशिफल 2027 और लेख"), ("/web-stories/", "वेब स्टोरी"), ("/#kundli-banayen", "मुफ़्त कुंडली"), ("/#milan", "कुंडली मिलान"), ("/#panchang", "पंचांग")],
+                       ("/rashifal/love.html", "लव राशिफल"), ("/rashifal/ank-jyotish.html", "अंक ज्योतिष"), ("/lekh/", "राशिफल 2027 और लेख"), ("/web-stories/", "वेब स्टोरी"), ("/#kundli-banayen", "मुफ़्त कुंडली"), ("/#milan", "कुंडली मिलान"), ("/#panchang", "पंचांग")],
                   svc="ज्योतिष सेवाएं", svcp="पंडित राजू पाठक से सीधे WhatsApp पर बात करें", go="WhatsApp पर पूछें →",
                   free="मुफ़्त सुविधाएँ", fl=[("/#kundli-banayen", "🔯 मुफ़्त कुंडली बनाएँ"), ("/#milan", "💑 मुफ़्त कुंडली मिलान"), ("/rashifal/", "♈ आज का राशिफल"), ("/#sadesati", "🪐 साढ़ेसाती जाँचें"), ("/#muhurat", "📅 शुभ मुहूर्त")],
-                  home="होम", by="लेखक", upd="अपडेट", share="शेयर करें"),
+                  home="होम", by="लेखक", upd="अपडेट", share="शेयर करें", tr="🔥 ट्रेंडिंग",
+                  trl=[("/rashifal/", "आज का राशिफल – मेष से मीन तक"), ("/rashifal/love.html", "आज का लव राशिफल ❤️"), ("/rashifal/ank-jyotish.html", "आज का अंक राशिफल (मूलांक 1-9)"),
+                       ("/rashifal/saptahik.html", "साप्ताहिक राशिफल"), ("/lekh/rahu-ketu-gochar-5-december-2026.html", "5 दिसंबर राहु-केतु गोचर: 12 राशियों पर असर"),
+                       ("/lekh/shani-sadesati-dhaiya-2026-2027.html", "शनि साढ़ेसाती-ढैय्या 2026-27"), ("/lekh/", "राशिफल 2027 – सभी 12 राशियाँ")]),
        "en": dict(nav=[("/", "Home"), ("/en/lekh/", "Horoscope 2027 & Articles"), ("/rashifal/", "Daily Horoscope (Hindi)"), ("/#kundli-banayen", "Free Kundli"), ("/#milan", "Kundli Matching"), ("/#panchang", "Panchang")],
                   svc="Astrology Services", svcp="Talk to Pandit Raju Pathak directly on WhatsApp", go="Ask on WhatsApp →",
                   free="Free Tools", fl=[("/#kundli-banayen", "🔯 Free Kundli"), ("/#milan", "💑 Free Kundli Matching"), ("/#sadesati", "🪐 Check Sade Sati"), ("/#muhurat", "📅 Shubh Muhurat")],
-                  home="Home", by="By", upd="Updated", share="Share")}
+                  home="Home", by="By", upd="Updated", share="Share", tr="🔥 Trending",
+                  trl=[("/en/lekh/", "Horoscope 2027 – all 12 signs"), ("/en/lekh/mesh-rashifal-2027.html", "Aries Horoscope 2027"), ("/en/lekh/vrishchik-rashifal-2027.html", "Scorpio Horoscope 2027"), ("/web-stories/", "Web Stories")])}
 
 
 def rashi_bar(cur=None, lang="hi"):
@@ -113,6 +117,7 @@ def aside(lang="hi"):
     fl = "".join(f'<a class="ln" href="{u}">{n}</a>' for u, n in T["fl"])
     return (f'<div class="svc"><h3>🔯 {T["svc"]}</h3><p>{T["svcp"]}</p><div class="svg">{g}</div>'
             f'<a class="go" href="{wa(SVC[lang][0][3])}" target="_blank" rel="noopener">{T["go"]}</a></div>'
+            f'<div class="side"><h3>{T["tr"]}</h3>' + "".join(f'<a class="ln" href="{u}">{n}</a>' for u, n in T["trl"]) + '</div>'
             f'<div class="side"><h3>{T["free"]}</h3>{fl}</div>')
 
 
@@ -211,6 +216,168 @@ def period_page(data, now, dh, p, slug, name, en_name):
     open(os.path.join(OUT, slug), "w", encoding="utf-8").write(shell(title, desc, url, body, [ld, bld]))
 
 
+# ---------------- लव राशिफल (सर्वर के आज के गोचर-आधारित प्रेम और वैवाहिक सितारों से) ----------------
+def lvl(v):
+    v = int(v or 0)
+    return 0 if v <= 2 else (1 if v == 3 else 2)
+
+
+def star_of(a, name):
+    for x in a.get("stars") or []:
+        if x.get("name") == name:
+            return int(x.get("value") or 0)
+    return 0
+
+
+LOVE = ("प्रेम संबंधों में ग़लतफ़हमी हो सकती है। साथी से बहस या पुरानी बातें छेड़ने से बचें और धैर्य से काम लें।",
+        "प्रेम जीवन सामान्य रहेगा। साथी की भावनाओं को समझें और उनके लिए थोड़ा समय ज़रूर निकालें।",
+        "प्रेम जीवन में मिठास बढ़ेगी। साथी के साथ यादगार समय बीतेगा, दिल की बात कहने के लिए समय अच्छा है।")
+MARRIED = ("वैवाहिक जीवन में छोटी बात पर तकरार हो सकती है। जीवनसाथी की बात ध्यान से सुनें, ग़ुस्से में कोई फ़ैसला न लें।",
+           "जीवनसाथी के साथ संबंध सामान्य रहेंगे। घर के कामों में एक-दूसरे का हाथ बँटाएँ, आपसी समझ बढ़ेगी।",
+           "जीवनसाथी के साथ प्यार और सहयोग बढ़ेगा। साथ में बाहर जाने या घर पर ख़ास पल बिताने का योग है।")
+SINGLE = ("अविवाहित लोग रिश्ते की बात जल्दबाज़ी में आगे न बढ़ाएँ।",
+          "अविवाहितों के लिए रिश्ते की बात धीरे-धीरे आगे बढ़ सकती है।",
+          "अविवाहितों को किसी ख़ास व्यक्ति से मुलाक़ात या रिश्ते की अच्छी ख़बर मिल सकती है।")
+LUPAY = ("शुक्र मंत्र 'ॐ शुं शुक्राय नमः' का 108 बार जाप करें।",
+         "माता लक्ष्मी को सफ़ेद मिठाई का भोग लगाएँ।",
+         "साथी को गुलाबी रंग का कोई छोटा उपहार दें, रिश्ते में मिठास बनी रहेगी।")
+
+
+def hearts(v):
+    return f'<span style="color:#d6336c;letter-spacing:2px">{"♥" * v}{"♡" * (5 - v)}</span>'
+
+
+def love_page(data, now, dh, de):
+    url = f"{SITE}/rashifal/love.html"
+    rows, best, care = [], [], []
+    for h, s, en, ro, sym, ak in RASHIS:
+        a = data[s]["aaj"]
+        pv, mv = star_of(a, "प्रेम"), star_of(a, "वैवाहिक जीवन")
+        if not pv:
+            continue
+        (best if pv >= 4 else care if pv <= 2 else []).append(h)
+        moon = ""
+        t = a.get("text") or ""
+        i = t.find("चंद्रमा आपकी राशि से")
+        if i >= 0:
+            moon = t[i:t.find("।", i) + 1]
+        rows.append(f'<div class="card" id="{s}"><h2><a href="{s}.html" style="text-decoration:none">{sym} {h} लव राशिफल</a></h2>'
+                    f'<div class="sub">{ro} Love Horoscope • {en} • प्रेम {hearts(pv)} &nbsp; वैवाहिक जीवन {hearts(mv)}</div>'
+                    f'<p>{esc(moon)} {LOVE[lvl(pv)]} {SINGLE[lvl(pv)]}</p><p><b>शादीशुदा लोगों के लिए:</b> {MARRIED[lvl(mv)]}</p>'
+                    f'<p><b>❤️ प्रेम उपाय:</b> {LUPAY[lvl(pv)]} &nbsp; <b>शुभ रंग:</b> {esc(a.get("shubh_rang"))}</p></div>')
+    if not rows:
+        return
+    if best:
+        head = f"{', '.join(best[:3])}{' समेत ' + str(len(best)) + ' राशियों' if len(best) > 3 else ' राशि वालों'} के प्रेम जीवन में बढ़ेगी मिठास"
+    else:
+        head = "जानें मेष से मीन तक प्रेम और वैवाहिक जीवन का हाल"
+    title = f"लव राशिफल {dh}: {head} | Aaj Ka Love Rashifal"
+    bch, bld = crumbs([("राशिफल", f"{SITE}/rashifal/"), ("लव राशिफल", None)])
+    summ = (f"<b>संक्षेप में:</b> आज ({DAYS[now.weekday()]}) " + (f"{', '.join(best)} राशि वालों का प्रेम जीवन अच्छा रहेगा। " if best else "") +
+            (f"{', '.join(care)} राशि वाले रिश्तों में संभलकर बात करें। " if care else "") + "पूरा हाल नीचे अपनी राशि में पढ़ें।")
+    body = (f'<div class="card">{bch}<h1>लव राशिफल {dh}: {head}</h1><div class="sub">Aaj Ka Love Rashifal • Love Horoscope Today {de} • प्रेम और वैवाहिक जीवन</div>'
+            f'{meta(url, title, dh)}<div class="sum">{summ}</div>{rashi_links()}</div>' + "".join(rows) +
+            '<div class="card"><h2>यह लव राशिफल कैसे बनता है?</h2><p>यह राशिफल चंद्र राशि से आज के ग्रह गोचर (चंद्रमा, शुक्र, मंगल, गुरु आदि) को देखकर बनाया जाता है। '
+            'पंचम भाव प्रेम का और सप्तम भाव विवाह का होता है, इन पर ग्रहों का असर देखकर सितारे दिए जाते हैं। यह सामान्य फल है; अपने रिश्ते या विवाह के बारे में सटीक जानकारी के लिए अपनी कुंडली दिखाएँ।</p>'
+            '<a class="btn red" href="/#milan">मुफ़्त कुंडली मिलान</a><a class="btn" href="' + wa("नमस्ते पंडित जी, मुझे विवाह/प्रेम संबंध के बारे में पूछना है।") + '">WhatsApp पर पूछें</a></div>')
+    ld = {"@context": "https://schema.org", "@type": "Article", "headline": f"लव राशिफल {dh}", "datePublished": now.isoformat(), "dateModified": now.isoformat(),
+          "inLanguage": "hi", "author": {"@type": "Person", "name": "पंडित राजू पाठक"},
+          "publisher": {"@type": "Organization", "name": "All Is Well Rashifal", "logo": {"@type": "ImageObject", "url": f"{SITE}/favicon.png"}},
+          "image": f"{SITE}/og.jpg", "mainEntityOfPage": url}
+    desc = f"आज का लव राशिफल {dh}: मेष से मीन तक प्रेम जीवन, वैवाहिक जीवन, अविवाहितों के लिए रिश्ते और प्रेम उपाय – पंडित राजू पाठक।"
+    open(os.path.join(OUT, "love.html"), "w", encoding="utf-8").write(shell(title, desc, url, body, [ld, bld]))
+
+
+# ---------------- अंक राशिफल (मूलांक 1-9): अंक-स्वामी ग्रह और आज के अंक व वार-स्वामी की नैसर्गिक मित्रता से ----------------
+NUM_LORD = {1: "सूर्य", 2: "चंद्र", 3: "गुरु", 4: "राहु", 5: "बुध", 6: "शुक्र", 7: "केतु", 8: "शनि", 9: "मंगल"}
+VAAR_LORD = ["चंद्र", "मंगल", "बुध", "गुरु", "शुक्र", "शनि", "सूर्य"]  # Python weekday (सोम=0)
+MAITRI = {  # (मित्र, शत्रु) – बाकी सम
+    "सूर्य": ({"चंद्र", "मंगल", "गुरु"}, {"शुक्र", "शनि", "राहु", "केतु"}),
+    "चंद्र": ({"सूर्य", "बुध"}, {"राहु", "केतु"}),
+    "मंगल": ({"सूर्य", "चंद्र", "गुरु"}, {"बुध", "राहु"}),
+    "बुध": ({"सूर्य", "शुक्र", "राहु"}, {"चंद्र"}),
+    "गुरु": ({"सूर्य", "चंद्र", "मंगल", "केतु"}, {"बुध", "शुक्र"}),
+    "शुक्र": ({"बुध", "शनि", "राहु"}, {"सूर्य", "चंद्र"}),
+    "शनि": ({"बुध", "शुक्र", "राहु"}, {"सूर्य", "चंद्र", "मंगल"}),
+    "राहु": ({"बुध", "शुक्र", "शनि"}, {"सूर्य", "चंद्र", "मंगल"}),
+    "केतु": ({"मंगल", "गुरु"}, {"सूर्य", "चंद्र"}),
+}
+NUM_NATURE = {1: "नेतृत्व करने वाले, आत्मविश्वासी और स्वाभिमानी", 2: "भावुक, कल्पनाशील और शांत स्वभाव के", 3: "ज्ञानी, अनुशासित और सलाह देने में आगे",
+              4: "मेहनती, अलग सोच रखने वाले और अचानक फ़ैसले लेने वाले", 5: "बुद्धिमान, बातचीत में कुशल और व्यापारिक सोच वाले",
+              6: "कला-प्रेमी, आकर्षक और सुख-सुविधा पसंद", 7: "गहरी सोच वाले, आध्यात्मिक और रहस्यमयी स्वभाव के",
+              8: "धैर्यवान, गंभीर और लंबी मेहनत से सफलता पाने वाले", 9: "साहसी, ऊर्जावान और जोशीले"}
+NUM_COLOUR = {1: "केसरिया", 2: "सफ़ेद", 3: "पीला", 4: "नीला-स्लेटी", 5: "हरा", 6: "गुलाबी", 7: "हल्का भूरा", 8: "गहरा नीला", 9: "लाल"}
+NUM_UPAY = {1: "सुबह सूर्य देव को जल चढ़ाएँ", 2: "शिवलिंग पर दूध-जल चढ़ाएँ", 3: "केले के पेड़ में जल और हल्दी चढ़ाएँ",
+            4: "माँ दुर्गा का ध्यान करें और पक्षियों को दाना डालें", 5: "गाय को हरा चारा खिलाएँ", 6: "माता लक्ष्मी को सफ़ेद मिठाई का भोग लगाएँ",
+            7: "गणेश जी को दूर्वा चढ़ाएँ", 8: "पीपल के नीचे सरसों के तेल का दीपक जलाएँ", 9: "हनुमान चालीसा का पाठ करें"}
+NUM_DAY = {  # स्तर -> क्षेत्र -> 3 विकल्प
+    0: {"c": ["काम में रुकावट या देरी हो सकती है, नया काम या बड़ा निवेश टालें।", "दफ़्तर में किसी से बहस न करें, अपना काम चुपचाप पूरा करें।", "जल्दबाज़ी में लिया फ़ैसला नुकसान दे सकता है, ज़रूरी काम कल पर टालें।"],
+        "m": ["पैसों के लेन-देन में सावधानी रखें, उधार देने से बचें।", "अचानक ख़र्च आ सकता है, फ़िज़ूलख़र्ची पर रोक लगाएँ।", "किसी के कहने पर पैसा न लगाएँ, धोखे से बचें।"],
+        "r": ["रिश्तों में छोटी बात पर मनमुटाव हो सकता है, वाणी पर संयम रखें।", "परिवार में किसी बात पर तनाव हो सकता है, शांत रहें।", "साथी की बात को दिल पर न लें, ग़लतफ़हमी जल्दी दूर होगी।"],
+        "h": ["थकान और तनाव रह सकता है, पर्याप्त आराम करें।", "पेट और सिर का ध्यान रखें, बाहर का खाना कम खाएँ।", "नींद पूरी न होने से चिड़चिड़ापन रह सकता है।"]},
+    1: {"c": ["काम सामान्य गति से चलेगा, मेहनत जारी रखें तो फल ज़रूर मिलेगा।", "पुराने अधूरे काम निपटाने के लिए दिन ठीक है।", "सहकर्मियों से तालमेल बनाकर चलें, काम आसानी से बनेंगे।"],
+        "m": ["आमदनी और ख़र्च बराबर रहेंगे, बजट बनाकर चलें।", "छोटा लाभ हो सकता है, बड़ा निवेश सोच-समझकर करें।", "पैसों की स्थिति स्थिर रहेगी, बचत पर ध्यान दें।"],
+        "r": ["परिवार और साथी के साथ संबंध सामान्य रहेंगे।", "किसी पुराने मित्र से बात हो सकती है, मन हल्का होगा।", "घर के बड़ों की सलाह आज काम आएगी।"],
+        "h": ["सेहत ठीक रहेगी, खान-पान और नींद का ध्यान रखें।", "हल्का व्यायाम या टहलना फ़ायदेमंद रहेगा।", "मौसम के बदलाव से सावधान रहें, पानी ज़्यादा पिएँ।"]},
+    2: {"c": ["काम में सफलता के अच्छे योग हैं, अटका काम बन सकता है।", "नई ज़िम्मेदारी या अच्छा मौका मिल सकता है, आगे बढ़कर लें।", "आपकी मेहनत की तारीफ़ होगी, बड़े लोगों का साथ मिलेगा।"],
+        "m": ["धन लाभ के योग हैं, रुका पैसा मिल सकता है।", "आमदनी बढ़ने के संकेत हैं, सौदे में फ़ायदा हो सकता है।", "पैसों से जुड़ा कोई अच्छा समाचार मिल सकता है।"],
+        "r": ["परिवार और साथी का पूरा साथ मिलेगा।", "किसी ख़ास से मुलाक़ात या शुभ समाचार मिल सकता है।", "रिश्तों में मिठास बढ़ेगी, घर में ख़ुशी का माहौल रहेगा।"],
+        "h": ["मन प्रसन्न और शरीर ऊर्जावान रहेगा।", "सेहत अच्छी रहेगी, नई ऊर्जा महसूस करेंगे।", "पुरानी परेशानी में राहत मिलेगी।"]}}
+
+
+def reduce9(n):
+    while n > 9:
+        n = sum(int(c) for c in str(n))
+    return n
+
+
+def rel(a, b):
+    if a == b or b in MAITRI[a][0]:
+        return 1, "मित्रता"
+    if b in MAITRI[a][1]:
+        return -1, "शत्रुता"
+    return 0, "सम संबंध"
+
+
+def ank_page(now, dh, de):
+    url = f"{SITE}/rashifal/ank-jyotish.html"
+    dn = reduce9(sum(int(c) for c in now.strftime("%d%m%Y")))
+    dlord, vlord, vaar = NUM_LORD[dn], VAAR_LORD[now.weekday()], DAYS[now.weekday()]
+    rows, best, care = [], [], []
+    for n in range(1, 10):
+        L = NUM_LORD[n]
+        s1, r1 = rel(L, dlord)
+        s2, r2 = rel(L, vlord)
+        lv = 2 if s1 + s2 >= 2 else (1 if s1 + s2 >= 0 else 0)
+        (best if lv == 2 else care if lv == 0 else []).append(str(n))
+        dates = ", ".join(str(d) for d in range(n, 32, 9))
+        lucky = ", ".join(str(k) for k in range(1, 10) if rel(L, NUM_LORD[k])[0] == 1)
+        word = ("संभलकर चलने का", "मिला-जुला", "शुभ")[lv]
+        c, m, r, h = (NUM_DAY[lv][k][(n + dn + q) % 3] for q, k in enumerate("cmrh"))
+        rows.append(f'<div class="card" id="m{n}"><h2>मूलांक {n} <small style="color:var(--muted);font-weight:400">(जन्म तारीख {dates})</small></h2>'
+                    f'<div class="sub">स्वामी ग्रह: {L} • आज का दिन: <b>{word}</b> {"★" * (lv + 2)}{"☆" * (3 - lv)}</div>'
+                    f'<p>मूलांक {n} वाले {NUM_NATURE[n]} होते हैं। आपके स्वामी {L} की आज के अंक {dn} के स्वामी {dlord} से {r1} है और आज के वार ({vaar}) के स्वामी {vlord} से {r2}, इसलिए आज का दिन आपके लिए {word} रहेगा।</p>'
+                    f'<p><b>💼 करियर:</b> {c} <b>💰 धन:</b> {m} <b>❤️ रिश्ते:</b> {r} <b>🩺 सेहत:</b> {h}</p>'
+                    f'<p><b>शुभ अंक:</b> {lucky} &nbsp; <b>शुभ रंग:</b> {NUM_COLOUR[n]} &nbsp; <b>उपाय:</b> {NUM_UPAY[n]}।</p></div>')
+    head = (f"मूलांक {', '.join(best)} वालों के लिए शुभ दिन" if best else "मूलांक 1 से 9 वालों का दिन कैसा रहेगा")
+    title = f"अंक राशिफल {dh}: {head} | Aaj Ka Ank Jyotish"
+    bch, bld = crumbs([("राशिफल", f"{SITE}/rashifal/"), ("अंक ज्योतिष", None)])
+    summ = (f"<b>संक्षेप में:</b> आज {dh} का कुल अंक <b>{dn}</b> है (स्वामी {dlord}) और {vaar} का स्वामी {vlord} है। "
+            + (f"मूलांक {', '.join(best)} वालों के लिए दिन शुभ है। " if best else "") + (f"मूलांक {', '.join(care)} वाले आज संभलकर चलें। " if care else ""))
+    how = ('<div class="card"><h2>अपना मूलांक कैसे जानें?</h2><p>अपनी जन्म तारीख (सिर्फ़ दिन) के अंकों को जोड़ें, जब तक एक अंक न बचे। जैसे 14 तारीख: 1+4 = <b>5</b>, '
+           '29 तारीख: 2+9 = 11, फिर 1+1 = <b>2</b>। यही आपका मूलांक है। आज का अंक पूरी तारीख (दिन+महीना+वर्ष) जोड़कर निकाला गया है।</p>'
+           '<p>यह फल मूलांक के स्वामी ग्रह की आज के अंक और वार के स्वामी ग्रह से नैसर्गिक मित्रता पर आधारित सामान्य फल है।</p>'
+           '<a class="btn red" href="/#kundli-banayen">मुफ़्त कुंडली बनाएँ</a><a class="btn" href="' + wa("नमस्ते पंडित जी, मुझे अंक ज्योतिष के बारे में पूछना है।") + '">WhatsApp पर पूछें</a></div>')
+    body = (f'<div class="card">{bch}<h1>अंक राशिफल {dh}: {head}</h1><div class="sub">Aaj Ka Ank Jyotish • Numerology Today {de} • मूलांक 1 से 9</div>'
+            f'{meta(url, title, dh)}<div class="sum">{summ}</div><div class="rl">' + "".join(f'<a href="#m{n}">मूलांक {n}</a>' for n in range(1, 10)) + '</div></div>' + "".join(rows) + how)
+    ld = {"@context": "https://schema.org", "@type": "Article", "headline": f"अंक राशिफल {dh}", "datePublished": now.isoformat(), "dateModified": now.isoformat(),
+          "inLanguage": "hi", "author": {"@type": "Person", "name": "पंडित राजू पाठक"},
+          "publisher": {"@type": "Organization", "name": "All Is Well Rashifal", "logo": {"@type": "ImageObject", "url": f"{SITE}/favicon.png"}},
+          "image": f"{SITE}/og.jpg", "mainEntityOfPage": url}
+    desc = f"आज का अंक राशिफल {dh}: मूलांक 1 से 9 वालों का करियर, धन, रिश्ते, सेहत, शुभ अंक, शुभ रंग और उपाय – पंडित राजू पाठक।"
+    open(os.path.join(OUT, "ank-jyotish.html"), "w", encoding="utf-8").write(shell(title, desc, url, body, [ld, bld]))
+
+
 def main():
     now = datetime.now(IST)
     dh = f"{now.day} {MONTHS[now.month - 1]} {now.year}"
@@ -261,6 +428,8 @@ def main():
                     for h, s, en, ro, sym, ak in RASHIS)
     period_page(data, now, dh, "saptah", "saptahik.html", "साप्ताहिक राशिफल", "Weekly")
     period_page(data, now, dh, "mahina", "masik.html", "मासिक राशिफल", "Monthly")
+    love_page(data, now, dh, de)
+    ank_page(now, dh, de)
     bch, bld = crumbs([("आज का राशिफल", None)])
     body = f'<div class="card">{bch}<h1>आज का राशिफल – {dh}</h1><div class="sub">{DAYS[now.weekday()]} • Aaj Ka Rashifal • Horoscope Today {de} • पंडित राजू पाठक</div>{rashi_links()}</div>{cards}'
     ld = [{"@context": "https://schema.org", "@type": "CollectionPage", "name": f"आज का राशिफल {dh}", "url": f"{SITE}/rashifal/"}, bld]
@@ -269,7 +438,7 @@ def main():
               f"आज का राशिफल {dh}: मेष, वृषभ, मिथुन, कर्क, सिंह, कन्या, तुला, वृश्चिक, धनु, मकर, कुंभ और मीन राशि का दैनिक राशिफल – पंडित राजू पाठक।",
               f"{SITE}/rashifal/", body, ld))
 
-    urls = [("", "daily"), ("rashifal/", "daily")] + [(f"rashifal/{s}.html", "daily") for _, s, *_ in RASHIS] + [("rashifal/saptahik.html", "daily"), ("rashifal/masik.html", "daily")] + \
+    urls = [("", "daily"), ("rashifal/", "daily")] + [(f"rashifal/{s}.html", "daily") for _, s, *_ in RASHIS] + [("rashifal/saptahik.html", "daily"), ("rashifal/masik.html", "daily"), ("rashifal/love.html", "daily"), ("rashifal/ank-jyotish.html", "daily")] + \
            [("lekh/", "weekly")] + [("lekh/" + f, "monthly") for f in sorted(os.listdir(os.path.join(ROOT, "docs", "lekh"))) if f.endswith(".html") and f != "index.html"] * os.path.isdir(os.path.join(ROOT, "docs", "lekh")) + \
            [(d + "/" + (f if f != "index.html" else ""), "weekly" if f == "index.html" else "monthly") for d in ("en/lekh", "web-stories") if os.path.isdir(os.path.join(ROOT, "docs", d)) for f in sorted(os.listdir(os.path.join(ROOT, "docs", d))) if f.endswith(".html")] + \
            [(u, "monthly") for u in ("about.html", "contact.html", "privacy.html", "disclaimer.html", "terms.html")]
