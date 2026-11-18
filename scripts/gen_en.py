@@ -204,7 +204,7 @@ def crumbs(items):
 
 
 def meta(url, title, date_txt):
-    return f'<div class="meta"><span>✍️ By: <b>Pandit Raju Pathak</b></span><span>🗓️ Updated: {esc(date_txt)}</span>{G.share(url, title, "en")}</div>'
+    return f'<div class="meta"><span>✍️ By: <b><a href="/author/">Pandit Raju Pathak</a></b></span><span>🗓️ Updated: {esc(date_txt)}</span>{G.share(url, title, "en")}</div>'
 
 
 def article_ld(head, now, url):
@@ -215,7 +215,8 @@ def article_ld(head, now, url):
 
 
 def shell(title, desc, slug, body, ld, cur=None):
-    en_url, hi_url = f"{SITE}/en/rashifal/{slug}", f"{SITE}/rashifal/{slug}"
+    s2 = "" if slug == "index.html" else slug
+    en_url, hi_url = f"{SITE}/en/rashifal/{s2}", f"{SITE}/rashifal/{s2}"
     nav = "".join(f'<a href="{u}">{n}</a>' for u, n in NAV)
     return f"""<!DOCTYPE html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
@@ -436,6 +437,7 @@ def link_hindi_pages():
         btn = f'<a class="lbtn" href="{en_url}" onclick="try{{localStorage.setItem(\'aiwr_lang\',\'en\')}}catch(e){{}}">English</a>'
         t = t.replace("</head>", head + "</head>", 1)
         t = t.replace("राशिफल • गोचर • पंचांग</small></div>", "राशिफल • गोचर • पंचांग</small></div>" + btn, 1)
+        t = t.replace("<b>पंडित राजू पाठक</b></span>", '<b><a href="/author/">पंडित राजू पाठक</a></b></span>', 1)
         open(p, "w", encoding="utf-8").write(t)
 
 
@@ -444,6 +446,8 @@ def sitemap(iso):
     t = open(p, encoding="utf-8").read()
     add = "".join(f"  <url><loc>{SITE}/en/rashifal/{'' if f == 'index.html' else f}</loc><lastmod>{iso}</lastmod><changefreq>daily</changefreq></url>\n"
                   for f in sorted(os.listdir(EN_DIR)) if f.endswith(".html") and f"/en/rashifal/{'' if f == 'index.html' else f}<" not in t)
+    if f"{SITE}/author/<" not in t:
+        add += f"  <url><loc>{SITE}/author/</loc><lastmod>{iso}</lastmod><changefreq>monthly</changefreq></url>\n"
     open(p, "w", encoding="utf-8").write(t.replace("</urlset>", add + "</urlset>"))
 
 
