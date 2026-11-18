@@ -358,7 +358,14 @@ html[lang=en] body{font-family:Mukta,system-ui,sans-serif}
 .svg{display:grid;grid-template-columns:1fr 1fr;gap:8px}.svg a{background:#fff;color:#4a0f19;border-radius:12px;padding:10px 8px;text-decoration:none;text-align:center;font-weight:800;font-size:15px;line-height:1.25}.svg a i{display:block;font-style:normal;font-size:28px;margin-bottom:2px}.svg a small{display:block;color:#b3121f;font-size:13px;margin-top:2px}
 .svc .go{display:block;text-align:center;background:#f3c97a;color:#4a0f19;border-radius:22px;padding:9px;margin-top:10px;font-weight:800;text-decoration:none}
 </style>
-</head>
+<style id="me-anim">.lead .img{position:relative;overflow:hidden;perspective:700px}.lead .img:before{content:"";position:absolute;left:50%;bottom:-12%;width:88%;aspect-ratio:1;transform:translateX(-50%);border-radius:50%;background:radial-gradient(circle,rgba(255,214,140,.55) 0,rgba(243,201,122,.25) 45%,transparent 70%);animation:meGlow 5s ease-in-out infinite}
+#leadimg.me{position:relative;max-width:360px;transform-origin:50% 100%;transform:translate3d(var(--mx,0px),var(--my,0px),0) rotateY(var(--ry,0deg)) rotateX(var(--rx,0deg));transition:transform .35s ease-out;filter:drop-shadow(0 10px 18px rgba(0,0,0,.35));will-change:transform}
+#leadimg.me.idle{animation:meSway 7s ease-in-out infinite}#leadimg.me.tap{animation:meTap .6s ease-out}
+@keyframes meSway{0%,100%{transform:translateY(0) rotate(0)}20%{transform:translateY(-5px) rotate(-1.4deg)}40%{transform:translateY(0) rotate(0)}60%{transform:translateY(-3px) rotate(1.4deg)}80%{transform:translateY(0) rotate(0)}}
+@keyframes meTap{0%{transform:scale(1)}35%{transform:scale(1.05) rotate(-2deg)}70%{transform:scale(.98) rotate(1.5deg)}100%{transform:scale(1)}}
+@keyframes meGlow{0%,100%{opacity:.75}50%{opacity:1}}
+@media (max-width:700px){#leadimg.me{max-width:270px}}
+@media (prefers-reduced-motion:reduce){#leadimg.me,#leadimg.me.idle,.lead .img:before{animation:none!important;transition:none}}</style></head>
 <body>
 
 <div class="top"><div class="wrap">
@@ -394,7 +401,7 @@ html[lang=en] body{font-family:Mukta,system-ui,sans-serif}
   <div class="grid">
     <div>
       <a class="card lead" href="#rashifal" data-v="home">
-        <div class="img"><img id="leadimg" alt="ज्योतिषी कुंडली बनाते हुए"></div>
+        <div class="img"><img id="leadimg" class="me" alt="पंडित राजू पाठक – All Is Well Rashifal"></div>
         <div class="txt">
           <span class="tag">आज का राशिफल</span>
           <h3 id="leadh">आज का राशिफल: जानिए मेष से मीन तक कैसा रहेगा आपका दिन</h3>
@@ -848,7 +855,7 @@ if (LIVE) fetch(API + '/').catch(() => {}); // सर्वर जगाएँ
 
 const now = new Date();
 $('today').innerHTML = `<b>${DAYS[now.getDay()]}</b>, ${now.getDate()} ${MONTHS[now.getMonth()]} ${now.getFullYear()}`;
-$('ph').src = IMG.photo; $('leadimg').src = IMG.pandit;
+$('ph').src = IMG.photo; $('leadimg').src = IMG.photo;
 $('rdate').textContent = `${now.getDate()} ${MONTHS[now.getMonth()]} ${now.getFullYear()}`;
 $('leadh').textContent = `आज का राशिफल ${now.getDate()} ${MONTHS[now.getMonth()]} ${now.getFullYear()}: जानिए मेष से मीन तक कैसा रहेगा आपका दिन`;
 
@@ -1581,5 +1588,9 @@ route();
 boot();
 applyLang();
 </script>
-</body>
+<script id="me-anim-js">(function(){var im=document.getElementById('leadimg');if(!im)return;var box=im.parentNode,t;function idle(){im.classList.add('idle')}idle();
+box.addEventListener('pointermove',function(e){if(e.pointerType!=='mouse')return;var r=box.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;im.classList.remove('idle');im.style.setProperty('--mx',(x*14)+'px');im.style.setProperty('--my',(y*8)+'px');im.style.setProperty('--ry',(x*10)+'deg');im.style.setProperty('--rx',(-y*6)+'deg');clearTimeout(t);t=setTimeout(reset,1500)});
+function reset(){['--mx','--my','--ry','--rx'].forEach(function(p){im.style.removeProperty(p)});setTimeout(idle,350)}
+box.addEventListener('pointerleave',reset);
+box.addEventListener('touchstart',function(){im.classList.remove('idle','tap');void im.offsetWidth;im.classList.add('tap');clearTimeout(t);t=setTimeout(function(){im.classList.remove('tap');idle()},650)},{passive:true});})();</script></body>
 </html>
