@@ -802,6 +802,7 @@ function lekhLang() {
     }
   });
   document.querySelectorAll('a[href="lekh/"],a[href="en/lekh/"]').forEach(a => a.setAttribute('href', LANG === 'en' ? 'en/lekh/' : 'lekh/'));
+  document.querySelectorAll('a[href^="rashifal/"],a[href^="en/rashifal/"],a[href^="/rashifal/"],a[href^="/en/rashifal/"]').forEach(a => { const h = a.getAttribute('href').replace(/^\/?(en\/)?/, ''); a.setAttribute('href', (LANG === 'en' ? 'en/' : '') + h); });
 }
 function applyLang() {
   lekhLang();
