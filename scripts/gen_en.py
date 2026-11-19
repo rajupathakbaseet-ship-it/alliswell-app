@@ -300,7 +300,7 @@ def period_page(en, now, de, p, slug, name):
     body = (f'<div class="card">{bch}<h1>{name}: {r}</h1><div class="sub">Aries, Taurus, Gemini, Cancer, Leo, Virgo, Libra, Scorpio, Sagittarius, Capricorn, Aquarius, Pisces</div>'
             f'{meta(url, f"{name} {r}", de)}<div class="sum"><b>In short:</b> Based on the planetary transits, here is how {r} looks for all 12 signs – career, money, love and health. Click your sign.</div>'
             f'{rashi_links()}</div>{cards}{KUNDLI_CARD}')
-    desc = f"{name} {r}: predictions for all 12 signs from Aries to Pisces – career, money, love, health and remedies. Pandit Raju Pathak, All Is Well Rashifal."
+    desc = f"{name} {r}: predictions for all 12 signs – career, money, love, health and remedies by Pandit Raju Pathak."
     write(slug, shell(title, desc, slug, body, [article_ld(f"{name} {r}", now, url), bld]))
 
 
@@ -417,7 +417,7 @@ def index_page(en, now, de):
     body = f'<div class="card">{bch}<h1>Today\'s Horoscope – {de}</h1><div class="sub">{DAYS_EN[now.weekday()]} • Daily Horoscope • Aaj Ka Rashifal • Pandit Raju Pathak</div>{rashi_links()}</div>{cards}'
     ld = [{"@context": "https://schema.org", "@type": "CollectionPage", "name": f"Today's Horoscope {de}", "url": url}, bld]
     write("index.html", shell(f"Today's Horoscope {de} – Aries to Pisces | Daily Horoscope – All Is Well Rashifal",
-                              f"Daily horoscope for {de}: Aries, Taurus, Gemini, Cancer, Leo, Virgo, Libra, Scorpio, Sagittarius, Capricorn, Aquarius and Pisces – Pandit Raju Pathak.",
+                              f"Today's horoscope for {de} for all 12 signs, Aries to Pisces – career, money, love, health, lucky number and colour by Pandit Raju Pathak.",
                               "index.html", body, ld))
 
 
