@@ -399,12 +399,12 @@ def main():
 
     for h, s, en, ro, sym, ak in RASHIS:
         a = data[s]["aaj"]
-        title = f"{h} राशिफल आज {dh} | Aaj Ka {ro} Rashifal – {en} Horoscope Today"
-        desc = f"आज का {h} राशिफल {dh} ({DAYS[now.weekday()]}): करियर, प्रेम, सेहत, धन, शुभ अंक, शुभ रंग और उपाय – पंडित राजू पाठक, All Is Well Rashifal।"
+        title = f"{h} राशिफल आज {dh} | Aaj Ka {ro} Rashifal, {ro} Rashi Today – {en} Horoscope"
+        desc = f"आज का {h} राशिफल {dh} (Aaj Ka {ro} Rashifal / {ro} Rashi Today): करियर, प्रेम, सेहत, धन, शुभ अंक, शुभ रंग और उपाय – पंडित राजू पाठक।"
         purl = f"{SITE}/rashifal/{s}.html"
         bch, bld = crumbs([("आज का राशिफल", f"{SITE}/rashifal/"), (f"{h} राशिफल", None)])
         body = f"""<div class="card">{bch}<span class="sym">{sym}</span><h1>{h} राशिफल आज – {dh}</h1>
-<div class="sub">{DAYS[now.weekday()]} • {ro} Rashifal Today • {en} Horoscope {de} • नाम अक्षर: {ak}</div>{meta(purl, f"{h} राशिफल आज {dh}", dh)}
+<div class="sub">{DAYS[now.weekday()]} • Aaj Ka {ro} Rashifal (Rashiphal) • {ro} Rashi Today • {en} Horoscope {de} • नाम अक्षर: {ak}</div>{meta(purl, f"{h} राशिफल आज {dh}", dh)}
 <h2>आज का {h} राशिफल</h2><p>{esc(a.get('text'))}</p>
 <div class="facts"><div><b>💼 करियर</b>{esc(a.get('career'))}</div><div><b>💞 प्रेम</b>{esc(a.get('prem'))}</div><div><b>🩺 सेहत</b>{esc(a.get('swasthya'))}</div><div><b>💰 धन</b>{esc(a.get('dhan'))}</div>
 <div><b>🔢 शुभ अंक</b>{esc(a.get('shubh_ank'))}</div><div><b>🎨 शुभ रंग</b>{esc(a.get('shubh_rang'))}</div>{f'<div><b>⏰ शुभ समय</b>{esc(a.get("best_time"))}</div>' if a.get('best_time') else ''}{f'<div><b>⚠️ सावधानी</b>{esc(a.get("caution_time"))}</div>' if a.get('caution_time') else ''}</div>
@@ -431,10 +431,10 @@ def main():
     love_page(data, now, dh, de)
     ank_page(now, dh, de)
     bch, bld = crumbs([("आज का राशिफल", None)])
-    body = f'<div class="card">{bch}<h1>आज का राशिफल – {dh}</h1><div class="sub">{DAYS[now.weekday()]} • Aaj Ka Rashifal • Horoscope Today {de} • पंडित राजू पाठक</div>{rashi_links()}</div>{cards}'
+    body = f'<div class="card">{bch}<h1>आज का राशिफल – {dh}</h1><div class="sub">{DAYS[now.weekday()]} • Aaj Ka Rashifal (Rashiphal) • Rashi Bhavishya • Horoscope Today {de} • पंडित राजू पाठक</div>{rashi_links()}</div>{cards}'
     ld = [{"@context": "https://schema.org", "@type": "CollectionPage", "name": f"आज का राशिफल {dh}", "url": f"{SITE}/rashifal/"}, bld]
     open(os.path.join(OUT, "index.html"), "w", encoding="utf-8").write(
-        shell(f"आज का राशिफल {dh} – मेष से मीन तक | Aaj Ka Rashifal – All Is Well Rashifal",
+        shell(f"आज का राशिफल {dh} – मेष से मीन तक | Aaj Ka Rashifal, Rashiphal Today – All Is Well Rashifal",
               f"आज का राशिफल {dh}: मेष, वृषभ, मिथुन, कर्क, सिंह, कन्या, तुला, वृश्चिक, धनु, मकर, कुंभ और मीन राशि का दैनिक राशिफल – पंडित राजू पाठक।",
               f"{SITE}/rashifal/", body, ld))
 
