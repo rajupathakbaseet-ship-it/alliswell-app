@@ -156,10 +156,10 @@ def shell(title, desc, canon, body, ld, lang="hi", cur=None):
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5358706010218532" crossorigin="anonymous"></script>
 <link rel="canonical" href="{canon}"><link rel="icon" href="../favicon.png">
 <meta property="og:title" content="{esc(title)}"><meta property="og:description" content="{esc(desc)}"><meta property="og:image" content="{SITE}/og.jpg"><meta property="og:url" content="{canon}">
-<link href="https://fonts.googleapis.com/css2?family=Mukta:wght@400;700;800&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Mukta:wght@400;700;800&display=optional" rel="stylesheet">
 <script type="application/ld+json">{json.dumps(ld, ensure_ascii=False)}</script>
 <style>{CSS}</style><script src="/push.js" defer></script></head><body>
-<div class="mast"><div class="w"><img src="../favicon.png" alt="पंडित राजू पाठक"><div><b>All Is Well Rashifal</b><small>पंडित राजू पाठक • राशिफल • गोचर • पंचांग</small></div></div></div>
+<div class="mast"><div class="w"><img src="../favicon.png" alt="पंडित राजू पाठक" width="56" height="56"><div><b>All Is Well Rashifal</b><small>पंडित राजू पाठक • राशिफल • गोचर • पंचांग</small></div></div></div>
 <nav><div class="w">{nav}</div></nav>
 {rashi_bar(cur, lang)}
 <div class="lay"><main>{body}</main><aside>{aside(lang)}</aside></div>

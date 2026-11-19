@@ -227,10 +227,10 @@ def shell(title, desc, slug, body, ld, cur=None):
 <link rel="canonical" href="{en_url}"><link rel="icon" href="/favicon.png">
 <link rel="alternate" hreflang="en" href="{en_url}"><link rel="alternate" hreflang="hi" href="{hi_url}"><link rel="alternate" hreflang="x-default" href="{hi_url}">
 <meta property="og:title" content="{esc(title)}"><meta property="og:description" content="{esc(desc)}"><meta property="og:image" content="{SITE}/og.jpg"><meta property="og:url" content="{en_url}">
-<link href="https://fonts.googleapis.com/css2?family=Mukta:wght@400;700;800&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Mukta:wght@400;700;800&display=optional" rel="stylesheet">
 <script type="application/ld+json">{json.dumps(ld, ensure_ascii=False)}</script>
 <style>{G.CSS}{LBTN_CSS}</style><script src="/push.js" defer></script></head><body>
-<div class="mast"><div class="w"><img src="/favicon.png" alt="Pandit Raju Pathak"><div><b>All Is Well Rashifal</b><small>Pandit Raju Pathak • Horoscope • Transits • Panchang</small></div><a class="lbtn" href="{hi_url}" onclick="try{{localStorage.setItem('aiwr_lang','hi')}}catch(e){{}}">हिंदी</a></div></div>
+<div class="mast"><div class="w"><img src="/favicon.png" alt="Pandit Raju Pathak" width="56" height="56"><div><b>All Is Well Rashifal</b><small>Pandit Raju Pathak • Horoscope • Transits • Panchang</small></div><a class="lbtn" href="{hi_url}" onclick="try{{localStorage.setItem('aiwr_lang','hi')}}catch(e){{}}">हिंदी</a></div></div>
 <nav><div class="w">{nav}</div></nav>
 {rashi_bar(cur)}
 <div class="lay"><main>{body}</main><aside>{aside()}</aside></div>
