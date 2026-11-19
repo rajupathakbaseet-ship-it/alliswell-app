@@ -1,7 +1,8 @@
 /* All Is Well Rashifal – Web Push (OneSignal)
    सभी पेज इसी एक फ़ाइल को लोड करते हैं। App ID बदलनी हो तो सिर्फ़ यहीं बदलें। */
 (function () {
-  var APP_ID = ""; // OneSignal App ID
+  var APP_ID = "37b155be-4347-489b-a539-798a1ffe7885"; // OneSignal App ID
+  var SAFARI_ID = "web.onesignal.auto.6401d2fc-b951-4213-a02c-03159c046b78";
   if (!APP_ID || !("Notification" in window)) return;
 
   var en = location.pathname.indexOf("/en/") === 0 ||
@@ -25,6 +26,7 @@
   OneSignalDeferred.push(async function (OneSignal) {
     await OneSignal.init({
       appId: APP_ID,
+      safari_web_id: SAFARI_ID,
       serviceWorkerPath: "/OneSignalSDKWorker.js",
       serviceWorkerParam: { scope: "/" },
       allowLocalhostAsSecureOrigin: false,
