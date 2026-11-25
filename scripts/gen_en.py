@@ -167,9 +167,9 @@ def to_en(a, period):
 
 
 # ---------------- page parts ----------------
-NAV = [("/", "Home"), ("/en/rashifal/", "Daily Horoscope"), ("/en/rashifal/saptahik.html", "Weekly"), ("/en/rashifal/masik.html", "Monthly"),
+NAV = [("/en/", "Home"), ("/en/rashifal/", "Daily Horoscope"), ("/en/rashifal/saptahik.html", "Weekly"), ("/en/rashifal/masik.html", "Monthly"),
        ("/en/rashifal/love.html", "Love Horoscope"), ("/en/rashifal/ank-jyotish.html", "Numerology"), ("/en/lekh/", "Horoscope 2027"),
-       ("/web-stories/", "Web Stories"), ("/#kundli-banayen", "Free Kundli"), ("/#milan", "Kundli Matching")]
+       ("/en/web-stories/", "Web Stories"), ("/#kundli-banayen", "Free Kundli"), ("/#milan", "Kundli Matching")]
 TREND = [("/en/rashifal/", "Today's horoscope – all 12 signs"), ("/en/rashifal/love.html", "Today's love horoscope ❤️"),
          ("/en/rashifal/ank-jyotish.html", "Today's numerology (1-9)"), ("/en/rashifal/saptahik.html", "Weekly horoscope"),
          ("/en/lekh/", "Horoscope 2027 – all 12 signs")]
@@ -268,7 +268,7 @@ def rashi_pages(en, now, de):
         if not a:
             continue
         url = f"{SITE}/en/rashifal/{s}.html"
-        title = f"{e} Horoscope Today {de} | {ro} Rashifal – Daily {e} Horoscope"
+        title = f"{e} Horoscope Today {de} | {ro} Rashifal"
         desc = f"{e} ({ro}) horoscope for today, {DAYS_EN[now.weekday()]} {de}: career, love, health, money, lucky number, lucky colour and remedy – Pandit Raju Pathak."
         bch, bld = crumbs([("Daily Horoscope", f"{SITE}/en/rashifal/"), (f"{e} Horoscope", None)])
         body = f"""<div class="card">{bch}<span class="sym">{sym}</span><h1>{e} Horoscope Today – {de}</h1>
@@ -282,7 +282,9 @@ def rashi_pages(en, now, de):
             t = (en[s].get(p) or {}).get("text")
             if t:
                 body += f'<div class="card" id="{p}"><h2>{e} {ph} ({RANGE[p]})</h2><p>{esc(t)}</p></div>'
-        body += KUNDLI_CARD + f'<div class="card"><h2>Today\'s horoscope for other signs</h2>{rashi_links(s)}</div>'
+        body += KUNDLI_CARD + (f'<div class="card"><h2>More for {e} ({ro})</h2><div class="rl"><a href="/en/lekh/{s}-rashifal-2027.html">📖 {e} Horoscope 2027</a>'
+                               f'<a href="/en/web-stories/{s}-horoscope-2027.html">📱 {e} 2027 Web Story</a><a href="/en/lekh/shani-sadesati-dhaiya-2026-2027.html">🪐 Shani Sade Sati &amp; Dhaiya 2026-27</a></div></div>')
+        body += f'<div class="card"><h2>Today\'s horoscope for other signs</h2>{rashi_links(s)}</div>'
         write(f"{s}.html", shell(title, desc, f"{s}.html", body, [article_ld(f"{e} Horoscope Today {de}", now, url), bld], cur=s))
 
 
@@ -342,13 +344,14 @@ def love_page(raw, now, de):
     bch, bld = crumbs([("Daily Horoscope", f"{SITE}/en/rashifal/"), ("Love Horoscope", None)])
     summ = (f"<b>In short:</b> Today ({DAYS_EN[now.weekday()]}) " + (f"love life looks good for {', '.join(best)}. " if best else "") +
             (f"{', '.join(care)} should speak carefully in relationships. " if care else "") + "Read your sign below.")
+    ttl = f"Love Horoscope Today {de} | All 12 Signs"
     body = (f'<div class="card">{bch}<h1>{title}</h1><div class="sub">Aaj Ka Love Rashifal • Love and married life</div>'
             f'{meta(url, title, de)}<div class="sum">{summ}</div>{rashi_links()}</div>' + "".join(rows) +
             '<div class="card"><h2>How is this love horoscope made?</h2><p>It is based on today\'s planetary transits (Moon, Venus, Mars, Jupiter and others) counted from your Moon sign. '
             'The 5th house rules love and the 7th house rules marriage; the stars show how the planets affect them. This is a general prediction – for your own relationship or marriage, show your kundli.</p>'
             '<a class="btn red" href="/#milan">Free kundli matching</a><a class="btn" href="' + G.wa("Namaste Pandit ji, I want to ask about love/marriage.") + '">Ask on WhatsApp</a></div>')
     desc = f"Today's love horoscope {de}: love life, married life and relationship news for singles, with love remedies for all 12 signs – Pandit Raju Pathak."
-    write("love.html", shell(title, desc, "love.html", body, [article_ld(title, now, url), bld]))
+    write("love.html", shell(ttl, desc, "love.html", body, [article_ld(title, now, url), bld]))
 
 
 NATURE = {1: "natural leaders, confident and self-respecting", 2: "emotional, imaginative and calm", 3: "wise, disciplined and good at giving advice",
@@ -403,10 +406,11 @@ def ank_page(now, de):
            'the 29th: 2+9 = 11, then 1+1 = <b>2</b>. That is your number. Today\'s number is found by adding the full date (day + month + year).</p>'
            '<p>This is a general prediction based on the natural friendship of your number\'s ruling planet with the rulers of today\'s number and weekday.</p>'
            '<a class="btn red" href="/#kundli-banayen">Make a free kundli</a><a class="btn" href="' + G.wa("Namaste Pandit ji, I want to ask about numerology.") + '">Ask on WhatsApp</a></div>')
+    ttl = f"Numerology Today {de} | Lucky Numbers 1-9"
     body = (f'<div class="card">{bch}<h1>{title}</h1><div class="sub">Aaj Ka Ank Jyotish • Numbers 1 to 9</div>'
             f'{meta(url, title, de)}<div class="sum">{summ}</div><div class="rl">' + "".join(f'<a href="#m{n}">Number {n}</a>' for n in range(1, 10)) + '</div></div>' + "".join(rows) + how)
     desc = f"Today's numerology {de}: career, money, relationships, health, lucky numbers, lucky colour and remedy for numbers 1 to 9 – Pandit Raju Pathak."
-    write("ank-jyotish.html", shell(title, desc, "ank-jyotish.html", body, [article_ld(title, now, url), bld]))
+    write("ank-jyotish.html", shell(ttl, desc, "ank-jyotish.html", body, [article_ld(title, now, url), bld]))
 
 
 def index_page(en, now, de):
@@ -416,7 +420,7 @@ def index_page(en, now, de):
     bch, bld = crumbs([("Daily Horoscope", None)])
     body = f'<div class="card">{bch}<h1>Today\'s Horoscope – {de}</h1><div class="sub">{DAYS_EN[now.weekday()]} • Daily Horoscope • Aaj Ka Rashifal • Pandit Raju Pathak</div>{rashi_links()}</div>{cards}'
     ld = [{"@context": "https://schema.org", "@type": "CollectionPage", "name": f"Today's Horoscope {de}", "url": url}, bld]
-    write("index.html", shell(f"Today's Horoscope {de} – Aries to Pisces | Daily Horoscope – All Is Well Rashifal",
+    write("index.html", shell(f"Today's Horoscope {de} – Aries to Pisces | Daily Horoscope",
                               f"Today's horoscope for {de} for all 12 signs, Aries to Pisces – career, money, love, health, lucky number and colour by Pandit Raju Pathak.",
                               "index.html", body, ld))
 
