@@ -67,3 +67,7 @@
   s.defer = true;
   document.head.appendChild(s);
 })();
+
+
+/* Header Search Box – push से अलग, अपने आप लोड होता है */
+(function () { try { var s = document.createElement("script"); s.src = "/js/khoj.js?v=1"; s.defer = true; document.head.appendChild(s); } catch (e) {} })();
