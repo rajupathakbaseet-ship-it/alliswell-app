@@ -26,6 +26,7 @@ RASHIS = [  # (हिंदी, slug, English, Roman, symbol, नाम अक�
     ("कुंभ", "kumbh", "Aquarius", "Kumbh", "♒", "गू, गे, गो, सा, सी, सू, से, सो, दा"),
     ("मीन", "meen", "Pisces", "Meen", "♓", "दी, दू, थ, झ, ञ, दे, दो, चा, ची"),
 ]
+TOOL_DIRS = ("en", "panchang", "kundli", "kundli-milan", "sadesati", "shubh-muhurat", "naam-akshar", "grah-gochar", "ratna-dukan")
 PERIODS = [("aaj", "आज का राशिफल"), ("saptah", "साप्ताहिक राशिफल"), ("mahina", "मासिक राशिफल")]
 
 
@@ -271,7 +272,7 @@ def love_page(data, now, dh, de):
         head = f"{', '.join(best[:3])}{' समेत ' + str(len(best)) + ' राशियों' if len(best) > 3 else ' राशि वालों'} के प्रेम जीवन में बढ़ेगी मिठास"
     else:
         head = "जानें मेष से मीन तक प्रेम और वैवाहिक जीवन का हाल"
-    title = f"लव राशिफल {dh}: {head} | Aaj Ka Love Rashifal"
+    title = f"आज का लव राशिफल {dh} | Love Rashifal Today"
     bch, bld = crumbs([("राशिफल", f"{SITE}/rashifal/"), ("लव राशिफल", None)])
     summ = (f"<b>संक्षेप में:</b> आज ({DAYS[now.weekday()]}) " + (f"{', '.join(best)} राशि वालों का प्रेम जीवन अच्छा रहेगा। " if best else "") +
             (f"{', '.join(care)} राशि वाले रिश्तों में संभलकर बात करें। " if care else "") + "पूरा हाल नीचे अपनी राशि में पढ़ें।")
@@ -360,7 +361,7 @@ def ank_page(now, dh, de):
                     f'<p><b>💼 करियर:</b> {c} <b>💰 धन:</b> {m} <b>❤️ रिश्ते:</b> {r} <b>🩺 सेहत:</b> {h}</p>'
                     f'<p><b>शुभ अंक:</b> {lucky} &nbsp; <b>शुभ रंग:</b> {NUM_COLOUR[n]} &nbsp; <b>उपाय:</b> {NUM_UPAY[n]}।</p></div>')
     head = (f"मूलांक {', '.join(best)} वालों के लिए शुभ दिन" if best else "मूलांक 1 से 9 वालों का दिन कैसा रहेगा")
-    title = f"अंक राशिफल {dh}: {head} | Aaj Ka Ank Jyotish"
+    title = f"आज का अंक राशिफल {dh} | Ank Jyotish Today"
     bch, bld = crumbs([("राशिफल", f"{SITE}/rashifal/"), ("अंक ज्योतिष", None)])
     summ = (f"<b>संक्षेप में:</b> आज {dh} का कुल अंक <b>{dn}</b> है (स्वामी {dlord}) और {vaar} का स्वामी {vlord} है। "
             + (f"मूलांक {', '.join(best)} वालों के लिए दिन शुभ है। " if best else "") + (f"मूलांक {', '.join(care)} वाले आज संभलकर चलें। " if care else ""))
@@ -399,7 +400,7 @@ def main():
 
     for h, s, en, ro, sym, ak in RASHIS:
         a = data[s]["aaj"]
-        title = f"{h} राशिफल आज {dh} | Aaj Ka {ro} Rashifal, {ro} Rashi Today – {en} Horoscope"
+        title = f"{h} राशिफल आज {dh} | {ro} Rashifal Today"
         desc = f"आज का {h} राशिफल {dh} (Aaj Ka {ro} Rashifal / {ro} Rashi Today): करियर, प्रेम, सेहत, धन, शुभ अंक, शुभ रंग और उपाय – पंडित राजू पाठक।"
         purl = f"{SITE}/rashifal/{s}.html"
         bch, bld = crumbs([("आज का राशिफल", f"{SITE}/rashifal/"), (f"{h} राशिफल", None)])
@@ -417,6 +418,7 @@ def main():
         body += f"""<div class="card"><h2>{en} Horoscope Today ({de})</h2><p>Daily {en} ({ro}) horoscope by Pandit Raju Pathak. Lucky number: {esc(a.get('shubh_ank'))}. The detailed prediction above is in Hindi.</p>
 <h2>अपनी कुंडली से सटीक भविष्य</h2><p>राशिफल सामान्य होता है। अपनी जन्म-कुंडली के अनुसार सटीक जानकारी के लिए पंडित राजू पाठक से पूरी कुंडली रिपोर्ट (₹2100) बनवाएँ।</p>
 <a class="btn red" href="/#kundli-banayen">मुफ़्त कुंडली बनाएँ</a><a class="btn" href="https://wa.me/918815605282">WhatsApp पर पूछें</a></div>
+<div class="card"><h2>{h} राशि – और पढ़ें</h2><div class="rl"><a href="/lekh/{s}-rashifal-2027.html">📖 {h} राशिफल 2027</a><a href="/web-stories/{s}-rashifal-2027.html">📱 {h} राशिफल 2027 वेब स्टोरी</a><a href="/lekh/shani-sadesati-dhaiya-2026-2027.html">🪐 शनि साढ़ेसाती-ढैय्या 2026-27</a></div></div>
 <div class="card"><h2>दूसरी राशियों का आज का राशिफल</h2>{rashi_links(s)}</div>"""
         ld = {"@context": "https://schema.org", "@type": "Article", "headline": f"{h} राशिफल आज {dh}", "datePublished": now.isoformat(),
               "dateModified": now.isoformat(), "inLanguage": "hi", "author": {"@type": "Person", "name": "पंडित राजू पाठक"},
@@ -434,18 +436,53 @@ def main():
     body = f'<div class="card">{bch}<h1>आज का राशिफल – {dh}</h1><div class="sub">{DAYS[now.weekday()]} • Aaj Ka Rashifal (Rashiphal) • Rashi Bhavishya • Horoscope Today {de} • पंडित राजू पाठक</div>{rashi_links()}</div>{cards}'
     ld = [{"@context": "https://schema.org", "@type": "CollectionPage", "name": f"आज का राशिफल {dh}", "url": f"{SITE}/rashifal/"}, bld]
     open(os.path.join(OUT, "index.html"), "w", encoding="utf-8").write(
-        shell(f"आज का राशिफल {dh} – मेष से मीन तक | Aaj Ka Rashifal, Rashiphal Today – All Is Well Rashifal",
+        shell(f"आज का राशिफल {dh} – मेष से मीन तक | Aaj Ka Rashifal",
               f"आज का राशिफल {dh}: मेष, वृषभ, मिथुन, कर्क, सिंह, कन्या, तुला, वृश्चिक, धनु, मकर, कुंभ और मीन राशि का दैनिक राशिफल – पंडित राजू पाठक।",
               f"{SITE}/rashifal/", body, ld))
 
     urls = [("", "daily"), ("rashifal/", "daily")] + [(f"rashifal/{s}.html", "daily") for _, s, *_ in RASHIS] + [("rashifal/saptahik.html", "daily"), ("rashifal/masik.html", "daily"), ("rashifal/love.html", "daily"), ("rashifal/ank-jyotish.html", "daily")] + \
            [("lekh/", "weekly")] + [("lekh/" + f, "monthly") for f in sorted(os.listdir(os.path.join(ROOT, "docs", "lekh"))) if f.endswith(".html") and f != "index.html"] * os.path.isdir(os.path.join(ROOT, "docs", "lekh")) + \
            [(d + "/" + (f if f != "index.html" else ""), "weekly" if f == "index.html" else "monthly") for d in ("en/lekh", "web-stories") if os.path.isdir(os.path.join(ROOT, "docs", d)) for f in sorted(os.listdir(os.path.join(ROOT, "docs", d))) if f.endswith(".html")] + \
+           [(d + "/" + (f if f != "index.html" else ""), "weekly" if f == "index.html" else "monthly") for d in ("en/web-stories",) if os.path.isdir(os.path.join(ROOT, "docs", d)) for f in sorted(os.listdir(os.path.join(ROOT, "docs", d))) if f.endswith(".html")] + \
+           [(d + "/", "weekly") for d in TOOL_DIRS if os.path.exists(os.path.join(ROOT, "docs", d, "index.html"))] + \
            [(u, "monthly") for u in ("about.html", "contact.html", "privacy.html", "disclaimer.html", "terms.html")]
     sm = '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' + "".join(
         f"  <url><loc>{SITE}/{u}</loc><lastmod>{iso}</lastmod><changefreq>{c}</changefreq></url>\n" for u, c in urls) + "</urlset>\n"
     open(os.path.join(ROOT, "docs", "sitemap.xml"), "w", encoding="utf-8").write(sm)
+    try:
+        import lekh_index  # लेख-सूची विषय के अनुसार
+        lekh_index.main()
+    except Exception as e:
+        print("lekh index:", e)
+    try:
+        search_index()
+    except Exception as e:
+        print("search index:", e)
     print("बन गए:", len(RASHIS), "राशि पेज", dh)
+
+
+def search_index():
+    """Header Search Box के लिए docs/search.json – हर रात अपने आप ताज़ा होता है।"""
+    import html, re
+    skip = ("404.html", "google", "khoj", "category", "/about/", "/contact/")
+    items = []
+    for dp, _, fs in os.walk(os.path.join(ROOT, "docs")):
+        for f in sorted(fs):
+            if not f.endswith(".html"):
+                continue
+            full = os.path.join(dp, f)
+            rel = os.path.relpath(full, os.path.join(ROOT, "docs")).replace(os.sep, "/")
+            if any(k in "/" + rel for k in skip):
+                continue
+            t = open(full, encoding="utf-8").read(6000)
+            m = re.search(r"<title>(.*?)</title>", t, re.S)
+            d = re.search(r'<meta name="description" content="([^"]*)"', t)
+            if not m:
+                continue
+            u = "/" + (rel[:-10] if rel.endswith("index.html") else rel)
+            items.append({"t": html.unescape(m.group(1).strip()), "d": html.unescape(d.group(1) if d else "")[:200], "u": u,
+                          "l": "en" if rel.startswith("en/") else "hi"})
+    open(os.path.join(ROOT, "docs", "search.json"), "w", encoding="utf-8").write(json.dumps(items, ensure_ascii=False, separators=(",", ":")))
 
 
 if __name__ == "__main__":
