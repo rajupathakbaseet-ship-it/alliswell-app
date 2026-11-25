@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="hi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>खोजें – All Is Well Rashifal | Search</title>
+<meta name="description" content="All Is Well Rashifal वेबसाइट में राशिफल, राशिफल 2027, व्रत-त्योहार, मुहूर्त और ज्योतिष लेख खोजें।">
+<meta name="robots" content="noindex,follow">
+<link rel="canonical" href="https://alliswellrashfal.com/khoj/"><link rel="icon" href="/favicon.png">
+<meta property="og:title" content="खोजें – All Is Well Rashifal"><meta property="og:image" content="https://alliswellrashfal.com/og.jpg"><meta property="og:url" content="https://alliswellrashfal.com/khoj/">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-20R9EGZKVE"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag("js",new Date());gtag("config","G-20R9EGZKVE");</script>
+<style>
+:root{--red:#b3121f;--maroon:#7a1e2c;--gold2:#e0a63a;--ink:#231713;--muted:#6b5a4e;--line:#eadfcf}
+body{margin:0;font-family:Mukta,system-ui,sans-serif;color:var(--ink);background:#f6f1ea;font-size:17px;line-height:1.55}
+.mast{background:#fff;border-bottom:4px solid var(--red)}.mast .w{max-width:1180px;margin:auto;padding:12px 16px;display:flex;align-items:center;gap:12px}
+.mast img{width:56px;height:56px;border-radius:50%;border:3px solid var(--gold2);object-fit:cover}.mast b{font-size:24px;color:var(--red);display:block;line-height:1.1}.mast small{color:var(--muted)}
+.mast a{text-decoration:none;color:inherit;display:flex;align-items:center;gap:12px}
+main{max-width:860px;margin:18px auto;padding:0 14px}.card{background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px;margin-bottom:12px}
+h1{margin:0 0 10px;color:var(--maroon);font-size:28px}#q{width:100%;box-sizing:border-box;border:2px solid var(--line);border-radius:10px;padding:10px 14px;font:inherit;font-size:18px}
+.r{display:block;text-decoration:none;color:inherit;padding:10px 0;border-bottom:1px solid var(--line)}.r b{color:var(--maroon);display:block;font-size:18px;line-height:1.35}.r small{color:var(--muted)}
+.tags a{display:inline-block;margin:4px 6px 0 0;padding:4px 10px;border-radius:16px;background:#fff3dc;color:var(--maroon);text-decoration:none;font-size:15px}
+footer{text-align:center;color:var(--muted);font-size:14px;padding:20px}
+</style><script src="/push.js" defer></script></head><body>
+<div class="mast"><div class="w"><a href="/"><img src="/favicon.png" alt="पंडित राजू पाठक" width="56" height="56"><div><b>All Is Well Rashifal</b><small id="sub">पंडित राजू पाठक • राशिफल • गोचर • पंचांग</small></div></a></div></div>
+<main><div class="card"><h1 id="h">🔍 वेबसाइट में खोजें</h1>
+<input id="q" type="search" autocomplete="off" placeholder="जैसे: मेष राशिफल 2027, एकादशी, विवाह मुहूर्त">
+<div class="tags" id="tags"></div></div>
+<div class="card" id="res"><small id="msg">लिखना शुरू करें…</small></div></main>
+<footer>© All Is Well Rashifal – पंडित राजू पाठक • 📞 8815605282</footer>
+<script>
+(function(){
+var P=new URLSearchParams(location.search),EN=P.get('lang')==='en';
+if(EN){document.documentElement.lang='en';document.title='Search – All Is Well Rashifal';$('h').textContent='🔍 Search the website';$('q').placeholder='e.g. Aries Horoscope 2027, Ekadashi, Marriage Muhurat';$('msg').textContent='Start typing…';$('sub').textContent='Pandit Raju Pathak • Horoscope • Transits • Panchang';}
+function $(i){return document.getElementById(i)}
+var TAGS=EN?[['Horoscope 2027','horoscope 2027'],['Daily Horoscope','horoscope today'],['Ekadashi','ekadashi'],['Marriage Muhurat','muhurat'],['Sade Sati','sade sati']]
+:[['राशिफल 2027','राशिफल 2027'],['आज का राशिफल','आज का राशिफल'],['एकादशी','एकादशी'],['विवाह मुहूर्त','मुहूर्त'],['साढ़ेसाती','साढ़ेसाती'],['पूर्णिमा','पूर्णिमा']];
+$('tags').innerHTML=TAGS.map(function(t){return '<a href="#" data-q="'+t[1]+'">'+t[0]+'</a>'}).join('');
+$('tags').onclick=function(e){var q=e.target.getAttribute('data-q');if(q){e.preventDefault();$('q').value=q;run()}};
+var IDX=[];
+function norm(s){return (s||'').toLowerCase().replace(/[़]/g,'').replace(/rashiphal|rasifal|rashfal/g,'rashifal').replace(/kundali/g,'kundli')}
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+function run(){
+ var q=norm($('q').value.trim());
+ if(!q){$('res').innerHTML='<small>'+(EN?'Start typing…':'लिखना शुरू करें…')+'</small>';return}
+ var w=q.split(/\s+/);
+ var out=IDX.map(function(x){var t=norm(x.t),d=norm(x.d),u=x.u.toLowerCase(),s=0;
+   w.forEach(function(k){if(t.indexOf(k)>=0)s+=3;else if(d.indexOf(k)>=0)s+=1;else if(u.indexOf(k)>=0)s+=1;else s-=5});
+   if(EN?x.l==='en':x.l==='hi')s+=1;return [s,x]}).filter(function(a){return a[0]>0}).sort(function(a,b){return b[0]-a[0]}).slice(0,25);
+ $('res').innerHTML=out.length?out.map(function(a){var x=a[1];return '<a class="r" href="'+x.u+'"><b>'+esc(x.t)+'</b><small>'+esc(x.d.slice(0,150))+'</small></a>'}).join('')
+  :'<small>'+(EN?'Nothing found. Try another word.':'कुछ नहीं मिला। कोई दूसरा शब्द लिखें।')+'</small>';
+}
+$('q').addEventListener('input',run);
+fetch('/search.json').then(function(r){return r.json()}).then(function(d){IDX=d;var q0=P.get('q');if(q0){$('q').value=q0}run()}).catch(function(){$('res').innerHTML='<small>'+(EN?'Search is not available right now.':'खोज अभी उपलब्ध नहीं है।')+'</small>'});
+})();
+</script>
+</body></html>
